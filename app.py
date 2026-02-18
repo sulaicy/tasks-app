@@ -583,7 +583,7 @@ def admin_dashboard(user):
         fig_d = px.bar(df_d, x="اليوم", y="النقاط",
                        title="📈 إجمالي النقاط - آخر 7 أيام",
                        color_discrete_sequence=["#e8b84b"])
-        fig_d.update_traces(marker_line_width=0, marker_corner_radius=6)
+        fig_d.update_traces(marker_line_width=0)
         st.plotly_chart(dark_chart(fig_d), use_container_width=True)
 
         col_left, col_right = st.columns(2)
@@ -603,7 +603,7 @@ def admin_dashboard(user):
                 fig_g = px.bar(df_g, x="المجموعة", y="النقاط",
                                title="👥 تقدم المجموعات - اليوم",
                                color_discrete_sequence=["#a855f7"])
-                fig_g.update_traces(marker_line_width=0, marker_corner_radius=6)
+                fig_g.update_traces(marker_line_width=0)
                 st.plotly_chart(dark_chart(fig_g), use_container_width=True)
 
         # أداء الأفراد
@@ -618,7 +618,7 @@ def admin_dashboard(user):
                 fig_u = px.bar(df_u, x="الاسم", y="النقاط",
                                title="🏆 أداء الأفراد - اليوم",
                                color_discrete_sequence=["#22c55e"])
-                fig_u.update_traces(marker_line_width=0, marker_corner_radius=6)
+                fig_u.update_traces(marker_line_width=0)
                 st.plotly_chart(dark_chart(fig_u), use_container_width=True)
 
         # لوحة الشرف
