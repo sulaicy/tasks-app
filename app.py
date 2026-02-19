@@ -79,6 +79,7 @@ def T():
 def inject_css():
     t = T()
     dark = is_dark()
+    hide_keyboard_hint()
     st.markdown(f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap');
@@ -240,12 +241,45 @@ hr {{ border: none !important; border-top: 1px solid {t['border']} !important; m
 ::-webkit-scrollbar-thumb {{ background: {t['border']}; border-radius: 10px; }}
 ::-webkit-scrollbar-thumb:hover {{ background: {t['muted']}; }}
 
-/* اخفاء مؤشر لوحة المفاتيح العربية على الازرار */
-[data-testid="InputInstructions"] {{ display: none !important; }}
-[class*="stInputInstructions"]    {{ display: none !important; }}
-small                              {{ display: none !important; }}
-iframe + div small                 {{ display: none !important; }}
+/* ── إخفاء نص keyboard_ar من الأزرار ── */
+[data-testid="InputInstructions"],
+[class*="InputInstructions"],
+[class*="inputInstructions"],
+[class*="keyboard"],
+[aria-label*="keyboard"],
+button > div > small,
+button small,
+.stButton small,
+.stButton > button > div > small,
+.stFormSubmitButton small,
+.stFormSubmitButton > button > div > small,
+div[data-testid="stFormSubmitButton"] small,
+div[data-testid="stBaseButton-secondary"] small,
+div[data-testid="stBaseButton-primary"] small,
+small {{ display: none !important; visibility: hidden !important; width: 0 !important; height: 0 !important; overflow: hidden !important; }}
 </style>
+""", unsafe_allow_html=True)
+
+def hide_keyboard_hint():
+    """إخفاء نص keyboard_ar الذي يظهر على الأزرار في Streamlit"""
+    st.markdown("""
+<script>
+// إخفاء نص keyboard عبر JavaScript
+function removeKeyboardHints() {
+    const allSmall = document.querySelectorAll('small, [class*="InputInstructions"], [class*="keyboard"]');
+    allSmall.forEach(el => { el.style.display = 'none'; });
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(btn => {
+        const smalls = btn.querySelectorAll('small, [class*="keyboard"]');
+        smalls.forEach(s => { s.style.display = 'none'; });
+    });
+}
+// تشغيل فوري وعند كل تحديث
+removeKeyboardHints();
+setInterval(removeKeyboardHints, 500);
+const observer = new MutationObserver(removeKeyboardHints);
+observer.observe(document.body, { childList: true, subtree: true });
+</script>
 """, unsafe_allow_html=True)
 
 def style_chart(fig):
